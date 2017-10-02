@@ -2,11 +2,13 @@ package com.example.khidalgo_countbook;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final int PICK_CONTACT_REQUEST = 1;
+    static final int RESULT_DELETE = 1;
     private static final String FILENAME = "file.sav";
     private ListView oldCounterList;
 
@@ -47,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         addButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+                //This dialog was designed by using the android documentation as well as code from
+                //https://stackoverflow.com/questions/4279787/how-can-i-pass-values-between-a-dialog-and-an-activity
+                //https://stackoverflow.com/questions/30799369/disable-closing-alertdialog-if-edittext-is-empty
+                //2017-10-02
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
                 View diaView = inflater.inflate(R.layout.dialog, null);
@@ -57,12 +65,17 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                Counter newCounter = new Counter(name_field.getText().toString(),
-                                        Integer.parseInt(value_field.getText().toString()),
-                                        comment_field.getText().toString());
-                                counterList.add(newCounter);
-                                adapter.notifyDataSetChanged();
-                                saveInFile();
+                                Boolean wantToCloseDialog = ((name_field.getText().toString().trim().isEmpty())|
+                                        (value_field.getText().toString().trim().isEmpty()));
+                                // if EditText is empty disable closing on possitive button
+                                if (!wantToCloseDialog){
+                                    Counter newCounter = new Counter(name_field.getText().toString(),
+                                            Integer.parseInt(value_field.getText().toString()),
+                                            comment_field.getText().toString());
+                                    counterList.add(newCounter);
+                                    adapter.notifyDataSetChanged();
+                                    saveInFile();
+                                }
                             }
                         })
                         .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
@@ -93,6 +106,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        oldCounterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Counter openCounter = (Counter) parent.getItemAtPosition(position);
+                Intent intent = new Intent(MainActivity.this, CounterActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("EXTRA_NAME", openCounter.getName());
+                extras.putString("EXTRA_COMMENT", openCounter.getComment());
+                extras.putLong("EXTRA_DATE", openCounter.getDate().getTime());
+                extras.putInt("EXTRA_VAL", openCounter.getValue());
+                extras.putInt("EXTRA_INIT_VAL", openCounter.getValue());
+                extras.putInt("EXTRA_INDEX", position);
+                intent.putExtras(extras);
+                startActivityForResult(intent, PICK_CONTACT_REQUEST);
+            }
+        });
+
+
     }
 
     @Override

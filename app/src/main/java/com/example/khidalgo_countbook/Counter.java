@@ -74,6 +74,8 @@ public class Counter{
         date = new Date();
     }
 
+    public void setDate(long newtime) {date.setTime(newtime);}
+
     public void setName(String newname){
         name = newname;
     }
@@ -112,6 +114,6 @@ public class Counter{
 
     @Override
     public String toString() {
-        return name + "\n" + value.toString() + "|" + date.toString();
+        return name + "\n" + value.toString() + " | " + date.toString();
     }
 }
