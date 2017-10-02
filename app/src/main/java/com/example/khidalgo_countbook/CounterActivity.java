@@ -1,5 +1,6 @@
 package com.example.khidalgo_countbook;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -94,10 +95,9 @@ public class CounterActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Log.d("tag", "pressed delete");
-                Intent intent = new Intent(CounterActivity.this, MainActivity.class);
+                Intent intent = new Intent();
                 intent.putExtra("INDEX", counterIndex);
-                setResult(MainActivity.RESULT_DELETE, intent);
+                setResult(Activity.RESULT_FIRST_USER, intent);
                 finish();
             }
         });
@@ -162,16 +162,17 @@ public class CounterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Bundle bundle = new Bundle();
+        bundle.putInt("COUNTER_INDEX", counterIndex);
         bundle.putString("COUNTER_NAME", counterName);
         bundle.putString("COUNTER_COMMENT", counterComment);
         bundle.putLong("COUNTER_DATE", counterDate.getTime());
         bundle.putInt("COUNTER_VAL", counterVal);
         bundle.putInt("COUNTER_INITVAL", counterInitVal);
-        bundle.putInt("COUNTER_INDEX", counterIndex);
 
-        Intent mIntent = new Intent(CounterActivity.this, MainActivity.class);
+
+        Intent mIntent = new Intent();
         mIntent.putExtras(bundle);
-        setResult(RESULT_OK, mIntent);
+        setResult(Activity.RESULT_OK, mIntent);
         super.onBackPressed();
     }
 }

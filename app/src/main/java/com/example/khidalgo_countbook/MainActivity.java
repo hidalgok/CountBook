@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,11 +34,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int PICK_CONTACT_REQUEST = 1;
-    static final int RESULT_DELETE = 1;
+    public static final int PICK_CONTACT_REQUEST = 1;
+    public static final int RESULT_DELETE = 1;
     private static final String FILENAME = "file.sav";
     private ListView oldCounterList;
-
+    private TextView titleCounter;
     private ArrayList<Counter> counterList;
     private ArrayAdapter<Counter> adapter;
 
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         oldCounterList = (ListView) findViewById(R.id.oldCounterList);
         Button clearButton = (Button) findViewById(R.id.Clear);
         Button addButton = (Button) findViewById(R.id.Add);
+        titleCounter = (TextView) findViewById(R.id.title);
+        titleCounter.setText("Total Counters: 0");
 
         addButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -66,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                Boolean wantToCloseDialog = ((name_field.getText().toString().trim().isEmpty())|
+                                Boolean emptyFields = ((name_field.getText().toString().trim().isEmpty())|
                                         (value_field.getText().toString().trim().isEmpty()));
-                                // if EditText is empty disable closing on possitive button
-                                if (!wantToCloseDialog){
+                                if (!emptyFields){
                                     Counter newCounter = new Counter(name_field.getText().toString(),
                                             Integer.parseInt(value_field.getText().toString()),
                                             comment_field.getText().toString());
                                     counterList.add(newCounter);
+                                    titleCounter.setText("Total Counters: " + counterList.size());
                                     adapter.notifyDataSetChanged();
                                     saveInFile();
                                 }
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 counterList.clear();
 
                 adapter.notifyDataSetChanged();
-
+                titleCounter.setText("Total Counters: " + counterList.size());
                 saveInFile();
                 //finish();
 
@@ -117,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 extras.putString("EXTRA_COMMENT", openCounter.getComment());
                 extras.putLong("EXTRA_DATE", openCounter.getDate().getTime());
                 extras.putInt("EXTRA_VAL", openCounter.getValue());
-                extras.putInt("EXTRA_INIT_VAL", openCounter.getValue());
+                extras.putInt("EXTRA_INIT_VAL", openCounter.getInitVal());
                 extras.putInt("EXTRA_INDEX", position);
                 intent.putExtras(extras);
                 startActivityForResult(intent, PICK_CONTACT_REQUEST);
@@ -181,10 +184,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_CONTACT_REQUEST){
             if (resultCode == RESULT_OK){
-                Intent intent = getIntent();
-                Bundle bundle = intent.getExtras();
+                Bundle bundle = data.getExtras();
                 Counter editcounter = adapter.getItem(bundle.getInt("COUNTER_INDEX"));
                 editcounter.setName(bundle.getString("COUNTER_NAME"));
                 editcounter.setComment(bundle.getString("COUNTER_COMMENT"));
@@ -195,11 +198,11 @@ public class MainActivity extends AppCompatActivity {
                 saveInFile();
 
             }
-            else if (resultCode == RESULT_DELETE){
-                Intent intent = getIntent();
-                Integer index = intent.getIntExtra("Index", 0);
+            else if (resultCode == RESULT_FIRST_USER){
+                int index = data.getIntExtra("INDEX", 1);
                 counterList.remove(index);
                 adapter.notifyDataSetChanged();
+                titleCounter.setText("Total Counters: " + counterList.size());
                 saveInFile();
 
             }
