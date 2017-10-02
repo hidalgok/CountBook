@@ -1,3 +1,10 @@
+/**
+ * Counter
+ *
+ * Version 1.0
+ *
+ * October 2, 2017
+ */
 package com.example.khidalgo_countbook;
 
 import android.os.Parcel;
@@ -7,6 +14,9 @@ import java.util.Date;
 
 /**
  * Represents a counter object
+ *
+ * @author Ken Hidalgo
+ * @see MainActivity
  */
 public class Counter{
         private String name;
@@ -112,6 +122,10 @@ public class Counter{
         return init_val;
     }
 
+    /**
+     * Returns a string representation of this counter object
+     * @return counter string
+     */
     @Override
     public String toString() {
         return name + "\n" + value.toString() + " | " + date.toString();

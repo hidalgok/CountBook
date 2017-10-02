@@ -1,3 +1,10 @@
+/**
+ * CounterActivity
+ *
+ * Version 1.0
+ *
+ * October 2, 2017
+ */
 package com.example.khidalgo_countbook;
 
 import android.app.Activity;
@@ -8,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +23,12 @@ import android.widget.TextView;
 
 import java.util.Date;
 
+/**
+ * Represents a detailed and interactive view of the counter objects
+ *
+ * @author Ken Hidalgo
+ * @see MainActivity
+ */
 public class CounterActivity extends AppCompatActivity {
 
     private String counterName;
@@ -29,6 +43,7 @@ public class CounterActivity extends AppCompatActivity {
     private TextView valField;
     private TextView initValField;
 
+    /* Called before anything else */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +72,7 @@ public class CounterActivity extends AppCompatActivity {
         Button deleteButton = (Button) findViewById(R.id.delete);
         Button editButton = (Button) findViewById(R.id.edit);
 
+        //clicking decButton decrements current value by 1, stays at 0
         decButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -69,6 +85,7 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
+        //clicking incBtton increments current value by 1
         incButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -80,6 +97,7 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
+        //clicking resetButton sets current value to initial value
         resetButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -92,6 +110,7 @@ public class CounterActivity extends AppCompatActivity {
         });
 
 
+        //clicking deleteButton ends this activity and deletes the associated counter from the list
         deleteButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -103,6 +122,7 @@ public class CounterActivity extends AppCompatActivity {
         });
 
 
+        //clicking editButton brings up a dialog window prompting the user for new values
         editButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -150,6 +170,9 @@ public class CounterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates all texts fields
+     */
     private void updateDisplay(){
         nameField.setText(counterName);
         commentField.setText(counterComment);
@@ -158,7 +181,12 @@ public class CounterActivity extends AppCompatActivity {
         initValField.setText("Initial value: " + counterInitVal.toString());
     }
 
-    //Modified from https://stackoverflow.com/questions/2679250/setresult-does-not-work-when-back-button-pressed
+    /**
+     * Sends a return value to MainActivity when back button is pressed
+     *
+     * Modified from https://stackoverflow.com/questions/2679250/setresult-does-not-work-when-back-button-pressed
+     * 2017-10-02
+     */
     @Override
     public void onBackPressed() {
         Bundle bundle = new Bundle();
@@ -174,5 +202,20 @@ public class CounterActivity extends AppCompatActivity {
         mIntent.putExtras(bundle);
         setResult(Activity.RESULT_OK, mIntent);
         super.onBackPressed();
+    }
+
+    /**
+     * Sends a return value to MainActivity when up navigation is used
+     *
+     * Modified from: https://stackoverflow.com/questions/21261876/how-to-return-a-result-from-an-android-activity-when-navigating-up
+     * 2017-10-02
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+        }
+        return true;
     }
 }

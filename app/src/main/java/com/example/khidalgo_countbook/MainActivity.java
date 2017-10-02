@@ -1,3 +1,10 @@
+/**
+ * MainActivity
+ *
+ * Version 1.0
+ *
+ * October 2, 2017
+ */
 package com.example.khidalgo_countbook;
 
 import android.content.Context;
@@ -32,6 +39,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The main activity of this app
+ * Consists of a list with clickable objects as well as two buttons
+ *
+ * @author Ken Hidalgo
+ * @see Counter
+ * @see CounterActivity
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_CONTACT_REQUEST = 1;
@@ -39,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String FILENAME = "file.sav";
     private ListView oldCounterList;
     private TextView titleCounter;
-    private ArrayList<Counter> counterList;
+    private ArrayList<Counter> counterList = new ArrayList<Counter>();
     private ArrayAdapter<Counter> adapter;
 
+    /* Called before anything else */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +67,17 @@ public class MainActivity extends AppCompatActivity {
         Button clearButton = (Button) findViewById(R.id.Clear);
         Button addButton = (Button) findViewById(R.id.Add);
         titleCounter = (TextView) findViewById(R.id.title);
-        titleCounter.setText("Total Counters: 0");
+        titleCounter.setText("Total Counters: " + counterList.size());
 
+        /**
+         * Clicking the add button will bring up a new dialog window
+         * A user can enter in the parameters of a new counter
+         * Name and initial value must be provided
+         *
+         * Modified from: https://stackoverflow.com/questions/4850493/open-a-dialog-when-i-click-a-button
+         * and the Android Documentation
+         * 2017-10-02
+         */
         addButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 //This dialog was designed by using the android documentation as well as code from
@@ -69,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+                                //If OK is clicked, check to make sure no empty fields before saving
                                 Boolean emptyFields = ((name_field.getText().toString().trim().isEmpty())|
                                         (value_field.getText().toString().trim().isEmpty()));
                                 if (!emptyFields){
@@ -87,18 +113,15 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                             }
                         });
+                        //close dialog on cancel, no changes
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
         });
 
+        //Clicking the clear button will delete all counter objects
         clearButton.setOnClickListener(new View.OnClickListener() {
 
-            /**
-             * On clear button click delete all tweets and update screen
-             *
-             * @param v current view
-             */
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 counterList.clear();
@@ -111,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //On item click start up a new activity to show the chosen counter
         oldCounterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Counter openCounter = (Counter) parent.getItemAtPosition(position);
@@ -130,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * On start up of app, load any previously saved info and create adapter
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -139,8 +166,12 @@ public class MainActivity extends AppCompatActivity {
         oldCounterList.setAdapter(adapter);
     }
 
+    /**
+     * Loads up any previously saved counter lists
+     * Taken from CMPUT301 lab files (lonelyTwitter Project) and modified for this project
+     */
     private void loadFromFile() {
-        ArrayList<String> tweets = new ArrayList<String>();
+        //ArrayList<String> counters = new ArrayList<String>();
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
@@ -151,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             //2017-10-02
             Type listType = new TypeToken<ArrayList<Counter>>(){}.getType();
             counterList = gson.fromJson(in, listType);
+            titleCounter.setText("Total Counters: " + counterList.size());
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -161,6 +193,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves current counterlist to a file so it can be read later
+     * Taken from CMPUT301 lab files (lonelyTwitter) and modified for this project
+     */
     private void saveInFile() {
         try {
             FileOutputStream fos = openFileOutput(FILENAME,
@@ -182,11 +218,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Upon finish of CounterActivity, update counterlist to reflect any changes made
+     *
+     * @param requestCode code to counteractivity
+     * @param resultCode code specifying result
+     * @param data data package
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_CONTACT_REQUEST){
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK){ //user clicked back, update counter values
                 Bundle bundle = data.getExtras();
                 Counter editcounter = adapter.getItem(bundle.getInt("COUNTER_INDEX"));
                 editcounter.setName(bundle.getString("COUNTER_NAME"));
@@ -198,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 saveInFile();
 
             }
-            else if (resultCode == RESULT_FIRST_USER){
+            else if (resultCode == RESULT_FIRST_USER){ //user clicked delete, delete counter from list
                 int index = data.getIntExtra("INDEX", 1);
                 counterList.remove(index);
                 adapter.notifyDataSetChanged();
