@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">khidalgo-CountBook</string>
+    <string name="edit_name">Enter a name</string>
 </resources>
