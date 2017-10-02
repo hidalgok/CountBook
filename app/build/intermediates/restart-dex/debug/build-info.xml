@@ -6,22 +6,29 @@
     density="xxhdpi"
     format="10"
     plugin-version="2.3.3"
-    timestamp="1506968086778"
+    timestamp="1506971476853"
     token="-5185268771394157684"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="0" />
+        duration="1145" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="0" />
+        duration="59" />
     <task
         name="verifier"
-        duration="0" />
+        duration="23" />
+
+    <artifact
+        location="C:\Users\Ken\Cmput301Workspace\CountBook\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="C:\Users\Ken\Cmput301Workspace\CountBook\app\build\outputs\apk\app-debug.apk"
+        type="SPLIT_MAIN" />
 
     <build
         build-mode="FULL"
@@ -66,7 +73,7 @@
     </build>
     <build
         build-mode="COLD"
-        timestamp="1506967918863"
+        timestamp="1506971476853"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="C:\Users\Ken\Cmput301Workspace\CountBook\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
@@ -75,9 +82,5 @@
             location="C:\Users\Ken\Cmput301Workspace\CountBook\app\build\outputs\apk\app-debug.apk"
             type="SPLIT_MAIN" />
     </build>
-    <build
-        build-mode="COLD"
-        timestamp="1506968086778"
-        verifier="COLD_SWAP_REQUESTED" />
 
 </instant-run>

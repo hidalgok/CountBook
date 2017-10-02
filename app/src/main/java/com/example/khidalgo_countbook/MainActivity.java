@@ -50,7 +50,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final int PICK_CONTACT_REQUEST = 1;
-    public static final int RESULT_DELETE = 1;
     private static final String FILENAME = "file.sav";
     private ListView oldCounterList;
     private TextView titleCounter;
