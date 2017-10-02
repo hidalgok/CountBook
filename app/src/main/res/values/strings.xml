@@ -5,4 +5,10 @@
     <string name="add">add</string>
     <string name="Cancel">cancel</string>
     <string name="OK">ok</string>
+    <string name="Increment">increment</string>
+    <string name="Decrement">decrement</string>
+    <string name="Reset">reset</string>
+    <string name="Delete">delete</string>
+    <string name="Edit">edit</string>
+    <string name="title_activity_xd">XdActivity</string>
 </resources>

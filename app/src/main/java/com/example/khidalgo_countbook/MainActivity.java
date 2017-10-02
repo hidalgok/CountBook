@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -176,5 +177,33 @@ public class MainActivity extends AppCompatActivity {
             // TODO Auto-generated catch block
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == PICK_CONTACT_REQUEST){
+            if (resultCode == RESULT_OK){
+                Intent intent = getIntent();
+                Bundle bundle = intent.getExtras();
+                Counter editcounter = adapter.getItem(bundle.getInt("COUNTER_INDEX"));
+                editcounter.setName(bundle.getString("COUNTER_NAME"));
+                editcounter.setComment(bundle.getString("COUNTER_COMMENT"));
+                editcounter.setDate(bundle.getLong("COUNTER_DATE"));
+                editcounter.setVal(bundle.getInt("COUNTER_VAL"));
+                editcounter.setInitVal(bundle.getInt("COUNTER_INITVAL"));
+                adapter.notifyDataSetChanged();
+                saveInFile();
+
+            }
+            else if (resultCode == RESULT_DELETE){
+                Intent intent = getIntent();
+                Integer index = intent.getIntExtra("Index", 0);
+                counterList.remove(index);
+                adapter.notifyDataSetChanged();
+                saveInFile();
+
+            }
+        }
+
     }
 }
