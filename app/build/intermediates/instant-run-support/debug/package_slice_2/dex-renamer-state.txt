@@ -1,0 +1,4 @@
+#Mon Oct 02 07:41:03 MDT 2017
+base.0=C\:\\Users\\Ken\\Cmput301Workspace\\CountBook\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_2
+renamed.0=classes.dex
+file.0=C\:\\Users\\Ken\\Cmput301Workspace\\CountBook\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_2\\classes.dex
