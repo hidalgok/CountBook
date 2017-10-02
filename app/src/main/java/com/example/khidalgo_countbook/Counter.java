@@ -109,4 +109,9 @@ public class Counter{
     public Integer getInitVal() {
         return init_val;
     }
+
+    @Override
+    public String toString() {
+        return name + "\n" + value.toString() + "|" + date.toString();
+    }
 }

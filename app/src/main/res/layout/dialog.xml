@@ -61,27 +61,4 @@
         app:layout_constraintTop_toBottomOf="@+id/editValue"
         app:layout_constraintHorizontal_bias="0.503" />
 
-    <Button
-        android:id="@+id/Cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginBottom="140dp"
-        android:layout_marginLeft="60dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/OK"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginBottom="140dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="60dp"
-        android:text="OK"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.664"
-        app:layout_constraintLeft_toRightOf="@+id/Cancel"
-        app:layout_constraintRight_toRightOf="parent" />
-
 </android.support.constraint.ConstraintLayout>
